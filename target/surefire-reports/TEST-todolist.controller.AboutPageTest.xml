@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.service.TareaServiceTest" time="0.085" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.controller.AboutPageTest" time="4.273" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,9 +58,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="testModificarTarea" classname="todolist.service.TareaServiceTest" time="0.033"/>
-  <testcase name="testBorrarTarea" classname="todolist.service.TareaServiceTest" time="0.01"/>
-  <testcase name="asignarEtiquetaATarea" classname="todolist.service.TareaServiceTest" time="0.011"/>
-  <testcase name="testBuscarTarea" classname="todolist.service.TareaServiceTest" time="0.008"/>
-  <testcase name="testNuevaTareaUsuario" classname="todolist.service.TareaServiceTest" time="0.013"/>
+  <testcase name="getAboutDevuelveNombreAplicacion" classname="todolist.controller.AboutPageTest" time="0.446"/>
 </testsuite>
