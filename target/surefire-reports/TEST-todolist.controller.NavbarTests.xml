@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.repository.TareaTest" time="0.53" tests="9" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.controller.NavbarTests" time="0.956" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,13 +58,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="guardarTareaEnBaseDatos" classname="todolist.repository.TareaTest" time="0.061"/>
-  <testcase name="salvarTareaEnBaseDatosConUsuarioNoBDLanzaExcepcion" classname="todolist.repository.TareaTest" time="0.012"/>
-  <testcase name="unUsuarioTieneUnaListaDeTareas" classname="todolist.repository.TareaTest" time="0.011"/>
-  <testcase name="añadirUnaTareaAUnUsuarioEnBD" classname="todolist.repository.TareaTest" time="0.008"/>
-  <testcase name="laListaDeTareasDeUnUsuarioSeActualizaEnMemoriaConUnaNuevaTarea" classname="todolist.repository.TareaTest" time="0.002"/>
-  <testcase name="comprobarIgualdadTareasConId" classname="todolist.repository.TareaTest" time="0.003"/>
-  <testcase name="comprobarIgualdadTareasSinId" classname="todolist.repository.TareaTest" time="0.001"/>
-  <testcase name="crearTarea" classname="todolist.repository.TareaTest" time="0.001"/>
-  <testcase name="cambioEnLaEntidadEnTransactionalModificaLaBD" classname="todolist.repository.TareaTest" time="0.004"/>
+  <testcase name="menuDesplegableContieneOpcionLogout" classname="todolist.controller.NavbarTests" time="0.094"/>
+  <testcase name="navbarMuestraLoginYRegisterCuandoNoLogeado" classname="todolist.controller.NavbarTests" time="0.01"/>
+  <testcase name="navbarMuestraNombreUsuarioCorrectamente" classname="todolist.controller.NavbarTests" time="0.008"/>
+  <testcase name="navbarMuestraOpcionesUsuarioLogueado" classname="todolist.controller.NavbarTests" time="0.011"/>
+  <testcase name="navbarNoContieneEnlacesCriticosEnPaginasDeError" classname="todolist.controller.NavbarTests" time="0.008"/>
 </testsuite>
