@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments :: head (titulo='Lista de Usuarios')"></head>
+<html xmlns:th="http://www.thymeleaf.org" xml:lang="es">
+<head>
+    <th:block th:insert="~{fragments :: head (titulo='Usuarios Registrados')}"></th:block>
+</head>
 <body>
 <div class="container-fluid">
-    <div th:replace="fragments :: navbar"></div>
+    <!-- Usar expresión segura para nombre de usuario -->
+    <div th:replace="~{fragments :: navbar(
+         ${loggedIn},
+         ${usuario?.nombre ?: 'Guest'}
+     )}"></div>
+
     <div class="row mt-3">
         <div class="col">
             <h2>Usuarios Registrados</h2>
@@ -15,15 +22,20 @@
                 </tr>
                 </thead>
                 <tbody>
+                <!-- Mensaje para lista vacía -->
+                <tr th:if="${#lists.isEmpty(usuarios)}">
+                    <td colspan="2" class="text-center">No hay usuarios registrados</td>
+                </tr>
+                <!-- Filas de usuarios -->
                 <tr th:each="usuario : ${usuarios}">
-                    <td th:text="${usuario.id}"></td>
-                    <td th:text="${usuario.email}"></td>
+                    <td th:text="${usuario.id}">-1</td>
+                    <td th:text="${usuario.email}">email@placeholder</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<div th:replace="fragments::javascript"></div>
+<div th:replace="~{fragments::javascript}"></div>
 </body>
 </html>

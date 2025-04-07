@@ -81,7 +81,7 @@ public class NavbarTests {
         UsuarioData usuarioMock = new UsuarioData();
         usuarioMock.setId(userId);
         usuarioMock.setNombre("Richard Stallman");
-        usuarioMock.setEmail("richard");
+        usuarioMock.setEmail("richard@umh.es");
 
         when(sessionManager.usuarioLogeado()).thenReturn(userId);
         when(usuarioService.findById(userId)).thenReturn(usuarioMock);

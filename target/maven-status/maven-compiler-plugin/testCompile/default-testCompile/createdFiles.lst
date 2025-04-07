@@ -1,8 +1,11 @@
 todolist\controller\NavbarTests.class
-todolist\controller\TareaWebTest.class
 todolist\controller\UsuarioWebTest.class
+todolist\repository\UserListTest.class
+todolist\service\TareaServiceTest.class
+todolist\service\UserListServiceTest.class
+todolist\controller\UserListWebTest.class
+todolist\controller\TareaWebTest.class
 todolist\repository\UsuarioTest.class
 todolist\controller\AboutPageTest.class
 todolist\service\UsuarioServiceTest.class
-todolist\service\TareaServiceTest.class
 todolist\repository\TareaTest.class

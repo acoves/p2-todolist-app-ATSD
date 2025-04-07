@@ -3,6 +3,7 @@ package todolist.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import todolist.dto.UsuarioData;
 import todolist.service.UsuarioService;
 import todolist.authentication.ManagerUserSession;
 
@@ -23,13 +24,19 @@ public class UsuarioController {
     public String listUsuarios(Model model) {
         // Comprueba si hay un usuario logeado en la sesión
         Long usuarioId = managerUserSession.usuarioLogeado();
-        // Si no hay usuario logeado, redirige al formulario de login
-        if (usuarioId == null) {
+        // Verificar autenticación
+        boolean loggedIn = (usuarioId != null);
+        model.addAttribute("loggedIn", loggedIn);
+
+        if (!loggedIn) {
             return "redirect:/login";
         }
-        // Añade al modelo la lista de usuarios para mostrarla en la vista
+
+        UsuarioData usuario = usuarioService.findById(usuarioId);
+        model.addAttribute("usuario", usuario);
+
         model.addAttribute("usuarios", usuarioService.findAllUsuarios());
-        // Devuelve el nombre de la vista Thymeleaf que renderizará la lista
+
         return "listaUsuarios";
     }
 }

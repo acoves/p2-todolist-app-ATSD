@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.controller.TareaWebTest" time="0.891" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.service.UserListServiceTest" time="0.413" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,9 +58,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="deleteTareaDevuelveOKyBorraTarea" classname="todolist.controller.TareaWebTest" time="0.232"/>
-  <testcase name="editarTareaActualizaLaTarea" classname="todolist.controller.TareaWebTest" time="0.033"/>
-  <testcase name="listaTareas" classname="todolist.controller.TareaWebTest" time="0.016"/>
-  <testcase name="getNuevaTareaDevuelveForm" classname="todolist.controller.TareaWebTest" time="0.022"/>
-  <testcase name="postNuevaTareaDevuelveRedirectYAñadeTarea" classname="todolist.controller.TareaWebTest" time="0.018"/>
+  <testcase name="testFindAllUsuariosConvertsToDTO" classname="todolist.service.UserListServiceTest" time="0.003"/>
+  <testcase name="testFindAllUsuariosReturnsAllUsers" classname="todolist.service.UserListServiceTest" time="0.002"/>
+  <testcase name="testFindAllUsuariosWithNoUsers" classname="todolist.service.UserListServiceTest" time="0.001"/>
 </testsuite>
