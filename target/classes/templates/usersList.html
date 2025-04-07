@@ -6,7 +6,6 @@
 </head>
 <body>
 <div class="container-fluid">
-    <!-- Usar expresión segura para nombre de usuario -->
     <div th:replace="~{fragments :: navbar(
          ${loggedIn},
          ${usuarioLogeado?.nombre ?: 'Guest'}
@@ -24,11 +23,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- Mensaje para lista vacía -->
                 <tr th:if="${#lists.isEmpty(usuarios)}">
                     <td colspan="3" class="text-center">No hay usuarios registrados</td>
                 </tr>
-                <!-- Filas de usuarios -->
                 <tr th:each="usuario : ${usuarios}">
                     <td th:text="${usuario.id}">-1</td>
                     <td th:text="${usuario.email}">email@placeholder</td>

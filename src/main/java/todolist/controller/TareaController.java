@@ -67,7 +67,7 @@ public class TareaController {
         List<TareaData> tareas = tareaService.allTareasUsuario(idUsuario);
         model.addAttribute("usuario", usuario);
         model.addAttribute("tareas", tareas);
-        return "listaTareas";
+        return "tasksList";
     }
 
     @GetMapping("/tareas/{id}/editar")

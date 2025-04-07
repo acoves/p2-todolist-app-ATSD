@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Sql(scripts = "/clean-db.sql")
-public class TareaTest {
+public class TaskTest {
 
     @Autowired
     UsuarioRepository usuarioRepository;

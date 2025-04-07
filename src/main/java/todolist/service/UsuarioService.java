@@ -69,11 +69,9 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public UsuarioData findById(Long usuarioId) {
-        Usuario usuario = usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario == null) return null;
-        else {
-            return modelMapper.map(usuario, UsuarioData.class);
-        }
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // Lanza excepción
+        return modelMapper.map(usuario, UsuarioData.class);
     }
 
     // Método de solo lectura para obtener todos los usuarios registrados

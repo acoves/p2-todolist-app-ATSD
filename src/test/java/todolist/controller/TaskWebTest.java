@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/clean-db.sql")
-public class TareaWebTest {
+public class TaskWebTest {
 
     @Autowired
     private MockMvc mockMvc;
