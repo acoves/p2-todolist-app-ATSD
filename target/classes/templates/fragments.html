@@ -22,6 +22,9 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/usuarios/{id}/tareas(id=${usuario.id})}">Tasks</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/registered}">Usuarios</a>
+                </li>
             </ul>
             <!-- Menú derecho (login/logout) -->
             <ul class="navbar-nav ml-auto">
@@ -44,4 +47,5 @@
         </div>
     </nav>
 </div>
+
 </html>
