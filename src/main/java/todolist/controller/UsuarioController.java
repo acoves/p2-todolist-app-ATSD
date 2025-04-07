@@ -38,7 +38,7 @@ public class UsuarioController {
 
         model.addAttribute("usuarios", usuarioService.findAllUsuarios());
 
-        return "listaUsuarios";
+        return "usersList";
     }
     // Mapea las peticiones GET a la URL "/registered/{id}"
     @GetMapping("/registered/{id}")
@@ -54,7 +54,7 @@ public class UsuarioController {
             model.addAttribute("loggedIn", true);
             model.addAttribute("usuarioLogeado", usuarioService.findById(usuarioLogeadoId));
             model.addAttribute("usuario", usuario);
-            return "descripcionUsuario";
+            return "usersDescription";
 
         } catch (RuntimeException e) {
             return "redirect:/registered"; // Redirige si hay error

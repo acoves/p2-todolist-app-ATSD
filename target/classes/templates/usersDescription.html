@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
-    <title th:remove="all">Detalles del Usuario</title>
-    <th:block th:insert="~{fragments :: head (titulo='Detalles del Usuario')}"></th:block>
+    <title th:remove="all">User Details</title>
+    <th:block th:insert="~{fragments :: head (titulo='User Details')}"></th:block>
 </head>
 <body>
 <div class="container-fluid">
@@ -22,7 +22,6 @@
                         <li class="list-group-item">
                             <strong>Email:</strong>
                             <span th:text="${usuario.email} ?: 'No especificado'"></span>
-                        </li>
                         <li class="list-group-item">
                             <strong>Fecha de nacimiento:</strong>
                             <span th:if="${usuario.fechaNacimiento != null}"

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 // A diferencia de los tests web de tarea, donde usábamos los datos
 // de prueba de la base de datos, aquí vamos a practicar otro enfoque:
 // moquear el usuarioService.
-public class UsuarioWebTest {
+public class UserWebTest {
 
     @Autowired
     private MockMvc mockMvc;

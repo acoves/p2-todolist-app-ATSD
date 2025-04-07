@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Sql(scripts = "/clean-db.sql")
-public class TareaServiceTest {
+public class TaskServiceTest {
 
     @Autowired
     UsuarioService usuarioService;

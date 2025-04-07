@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Sql(scripts = "/clean-db.sql")
-public class UsuarioTest {
+public class UserTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
