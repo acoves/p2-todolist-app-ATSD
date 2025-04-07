@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.controller.TareaWebTest" time="0.891" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="todolist.controller.UserListWebTest" time="0.527" tests="5" errors="1" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -58,9 +58,262 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="deleteTareaDevuelveOKyBorraTarea" classname="todolist.controller.TareaWebTest" time="0.232"/>
-  <testcase name="editarTareaActualizaLaTarea" classname="todolist.controller.TareaWebTest" time="0.033"/>
-  <testcase name="listaTareas" classname="todolist.controller.TareaWebTest" time="0.016"/>
-  <testcase name="getNuevaTareaDevuelveForm" classname="todolist.controller.TareaWebTest" time="0.022"/>
-  <testcase name="postNuevaTareaDevuelveRedirectYAñadeTarea" classname="todolist.controller.TareaWebTest" time="0.018"/>
+  <testcase name="testUserListShowsEmptyMessage" classname="todolist.controller.UserListWebTest" time="0.017"/>
+  <testcase name="testUserListShowsIdsCorrectly" classname="todolist.controller.UserListWebTest" time="0.006"/>
+  <testcase name="testUserListRequiresAuthentication" classname="todolist.controller.UserListWebTest" time="0.003"/>
+  <testcase name="testUserListDoesNotShowPasswords" classname="todolist.controller.UserListWebTest" time="0.002"/>
+  <testcase name="testUserListShowsDataWhenAuthenticated" classname="todolist.controller.UserListWebTest" time="0.07">
+    <error message="The element type &quot;link&quot; must be terminated by the matching end-tag &quot;&lt;/link&gt;&quot;." type="org.xml.sax.SAXParseException"><![CDATA[org.xml.sax.SAXParseException: The element type "link" must be terminated by the matching end-tag "</link>".
+	at todolist.controller.UserListWebTest.testUserListShowsDataWhenAuthenticated(UserListWebTest.java:68)
+]]></error>
+    <system-out><![CDATA[
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /registered
+       Parameters = {}
+          Headers = []
+             Body = null
+    Session Attrs = {}
+
+Handler:
+             Type = todolist.controller.UsuarioController
+           Method = todolist.controller.UsuarioController#listUsuarios(Model)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = listaUsuarios
+             View = null
+        Attribute = loggedIn
+            value = true
+        Attribute = usuario
+            value = todolist.dto.UsuarioData@20
+           errors = []
+        Attribute = usuarios
+            value = [todolist.dto.UsuarioData@20, todolist.dto.UsuarioData@21]
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Language:"en", Content-Type:"text/html;charset=UTF-8"]
+     Content type = text/html;charset=UTF-8
+             Body = <!DOCTYPE html>
+<html xml:lang="es">
+<head>
+    <head>
+    <meta charset="UTF-8"/>
+    <title>Usuarios Registrados</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- Usar expresión segura para nombre de usuario -->
+    <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/about">ToDoList</a>
+        <div class="collapse navbar-collapse">
+            <!-- Menú izquierdo (solo para usuarios logueados) -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios/1/tareas">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/registered">Usuarios</a>
+                </li>
+                <!-- Nuevo enlace a User List -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/registered">Usuarios</a>
+                </li>
+            </ul>
+            <!-- Menú derecho (login/logout) -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        <span>Richard Stallman</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Account</a>
+                        <a class="dropdown-item" href="/logout">Log out</a>
+                    </div>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </nav>
+</div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <h2>Usuarios Registrados</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Mensaje para lista vacía -->
+                
+                <!-- Filas de usuarios -->
+                <tr>
+                    <td>1</td>
+                    <td>richard</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>linus</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /registered
+       Parameters = {}
+          Headers = []
+             Body = null
+    Session Attrs = {}
+
+Handler:
+             Type = todolist.controller.UsuarioController
+           Method = todolist.controller.UsuarioController#listUsuarios(Model)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = listaUsuarios
+             View = null
+        Attribute = loggedIn
+            value = true
+        Attribute = usuario
+            value = todolist.dto.UsuarioData@20
+           errors = []
+        Attribute = usuarios
+            value = [todolist.dto.UsuarioData@20, todolist.dto.UsuarioData@21]
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Language:"en", Content-Type:"text/html;charset=UTF-8"]
+     Content type = text/html;charset=UTF-8
+             Body = <!DOCTYPE html>
+<html xml:lang="es">
+<head>
+    <head>
+    <meta charset="UTF-8"/>
+    <title>Usuarios Registrados</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- Usar expresión segura para nombre de usuario -->
+    <div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/about">ToDoList</a>
+        <div class="collapse navbar-collapse">
+            <!-- Menú izquierdo (solo para usuarios logueados) -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/usuarios/1/tareas">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/registered">Usuarios</a>
+                </li>
+                <!-- Nuevo enlace a User List -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/registered">Usuarios</a>
+                </li>
+            </ul>
+            <!-- Menú derecho (login/logout) -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        <span>Richard Stallman</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Account</a>
+                        <a class="dropdown-item" href="/logout">Log out</a>
+                    </div>
+                </li>
+                
+                
+            </ul>
+        </div>
+    </nav>
+</div>
+
+    <div class="row mt-3">
+        <div class="col">
+            <h2>Usuarios Registrados</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Mensaje para lista vacía -->
+                
+                <!-- Filas de usuarios -->
+                <tr>
+                    <td>1</td>
+                    <td>richard</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>linus</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+]]></system-out>
+    <system-err><![CDATA[[Fatal Error] :8:3: The element type "link" must be terminated by the matching end-tag "</link>".
+]]></system-err>
+  </testcase>
 </testsuite>

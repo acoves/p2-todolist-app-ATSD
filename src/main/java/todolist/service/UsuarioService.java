@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import java.util.Optional;
 
@@ -72,4 +75,17 @@ public class UsuarioService {
             return modelMapper.map(usuario, UsuarioData.class);
         }
     }
+
+    // Método de solo lectura para obtener todos los usuarios registrados
+    @Transactional(readOnly = true)
+    public List<UsuarioData> findAllUsuarios() {
+        // Recupera todos los usuarios desde la base de datos usando CrudRepository
+        Iterable<Usuario> usuarios = usuarioRepository.findAll();
+        // Convierte el Iterable en un Stream, transforma cada entidad Usuario a su DTO UsuarioData,
+        // y recopila los resultados en una lista
+        return StreamSupport.stream(usuarios.spliterator(), false)
+                .map(usuario -> modelMapper.map(usuario, UsuarioData.class))
+                .collect(Collectors.toList());
+    }
+
 }
