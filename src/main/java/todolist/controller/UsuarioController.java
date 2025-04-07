@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import todolist.dto.UsuarioData;
+import org.springframework.web.bind.annotation.PathVariable;
 import todolist.service.UsuarioService;
 import todolist.authentication.ManagerUserSession;
 
@@ -38,5 +39,25 @@ public class UsuarioController {
         model.addAttribute("usuarios", usuarioService.findAllUsuarios());
 
         return "listaUsuarios";
+    }
+    // Mapea las peticiones GET a la URL "/registered/{id}"
+    @GetMapping("/registered/{id}")
+    public String verUsuario(@PathVariable Long id, Model model) {
+        Long usuarioLogeadoId = managerUserSession.usuarioLogeado();
+
+        if (usuarioLogeadoId == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            UsuarioData usuario = usuarioService.findById(id);
+            model.addAttribute("loggedIn", true);
+            model.addAttribute("usuarioLogeado", usuarioService.findById(usuarioLogeadoId));
+            model.addAttribute("usuario", usuario);
+            return "descripcionUsuario";
+
+        } catch (RuntimeException e) {
+            return "redirect:/registered"; // Redirige si hay error
+        }
     }
 }
