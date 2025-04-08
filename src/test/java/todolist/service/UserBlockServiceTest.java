@@ -12,6 +12,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test unitarios para verificar el método toggleUserStatus()
+ * que habilita o deshabilita a los usuarios.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserBlockServiceTest {
 
@@ -23,38 +27,35 @@ class UserBlockServiceTest {
 
     @Test
     void toggleUserStatus_shouldBlockUserWhenEnabledIsFalse() {
-        // Given
+        // Simula usuario habilitado en BD
         Usuario user = new Usuario("test@example.com");
         user.setId(1L);
         user.setEnabled(true);
         when(usuarioRepository.findById(1L)).thenReturn(Optional.of(user));
 
-        // When
         usuarioService.toggleUserStatus(1L, false);
 
-        // Then
         assertFalse(user.isEnabled());
         verify(usuarioRepository).save(user);
     }
 
     @Test
     void toggleUserStatus_shouldUnblockUserWhenEnabledIsTrue() {
-        // Given
+        // Simula usuario deshabilitado
         Usuario user = new Usuario("blocked@example.com");
         user.setId(2L);
         user.setEnabled(false);
         when(usuarioRepository.findById(2L)).thenReturn(Optional.of(user));
 
-        // When
         usuarioService.toggleUserStatus(2L, true);
 
-        // Then
         assertTrue(user.isEnabled());
         verify(usuarioRepository).save(user);
     }
 
     @Test
     void toggleUserStatus_shouldThrowExceptionForNonExistingUser() {
+        // Simula que el usuario no existe
         when(usuarioRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(UsuarioServiceException.class, () ->
                 usuarioService.toggleUserStatus(99L, false)

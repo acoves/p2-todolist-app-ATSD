@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title th:remove="all">User Details</title>
+    <!-- Inserta el <head> común con el título de la página -->
     <th:block th:insert="~{fragments :: head (titulo='User Details')}"></th:block>
 </head>
 <body>
@@ -12,6 +13,7 @@
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-header">
+                    <!-- Muestra el nombre y el email del usuario, o valores por defecto si están vacíos -->
                     <h4>
                         <span th:text="${usuario.nombre} ?: 'Usuario sin nombre'"></span>
                         <small th:text="'(@' + (${usuario.email} ?: 'sin email') + ')'" class="text-muted"></small>
@@ -19,23 +21,27 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
+                        <!-- Elemento para mostrar el email -->
                         <li class="list-group-item">
                             <strong>Email:</strong>
                             <span th:text="${usuario.email} ?: 'No especificado'"></span>
+                            <!-- Elemento para mostrar la fecha de nacimiento si está disponible -->
                         <li class="list-group-item">
                             <strong>Fecha de nacimiento:</strong>
                             <span th:if="${usuario.fechaNacimiento != null}"
                                   th:text="${#temporals.format(usuario.fechaNacimiento, 'dd/MM/yyyy')}">
-                             </span>
+                            </span>
                             <span th:if="${usuario.fechaNacimiento == null}">No especificada</span>
                         </li>
                     </ul>
+                    <!-- Botón para volver a la lista de usuarios -->
                     <a th:href="@{/registered}" class="btn btn-secondary mt-3">Volver a la lista</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Inserta los scripts JS comunes -->
 <div th:replace="~{fragments::javascript}"></div>
 </body>
 </html>

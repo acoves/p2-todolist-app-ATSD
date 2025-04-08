@@ -2,18 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es" xml:lang="es">
 <head>
     <title th:remove="all">Usuarios Registrados</title>
+    <!-- Inserta el bloque <head> desde el fragmento común, pasando el título de la página -->
     <th:block th:insert="~{fragments :: head (titulo='Usuarios Registrados')}"></th:block>
 </head>
 <body>
 <div class="container-fluid">
+    <!-- Inserta la barra de navegación, mostrando el nombre del usuario logeado -->
     <div th:replace="~{fragments :: navbar(
-         ${loggedIn},
-            ${usuario.nombre}
-     )}"></div>
+        ${loggedIn},
+        ${usuario.nombre}
+    )}"></div>
 
     <div class="row mt-3">
         <div class="col">
             <h2>Usuarios Registrados</h2>
+
             <div th:if="${error}" class="alert alert-danger" role="alert">
                 <span th:text="${error}"></span>
             </div>
@@ -27,29 +30,26 @@
                 </tr>
                 </thead>
                 <tbody>
+                <!-- Si no hay usuarios, muestra un mensaje -->
                 <tr th:if="${#lists.isEmpty(usuarios)}">
                     <td colspan="3" class="text-center">No hay usuarios registrados</td>
                 </tr>
+                <!-- Recorre la lista de usuarios y muestra su información -->
                 <tr th:each="usuarioFila : ${usuarios}">
                     <td th:text="${usuarioFila.id}">-1</td>
                     <td th:text="${usuarioFila.email}">email@placeholder</td>
                     <td>
-                        <a th:href="@{/registered/{id}(id=${usuarioFila.id})}" class="btn btn-info btn-sm">Ver detalles</a>
+                        <!-- Botón para ver detalles del usuario -->
+                        <a th:href="@{/registered/{id}(id=${usuarioFila.id})}"
+                           class="btn btn-info btn-sm">Ver detalles</a>
+
+                        <!-- Botón de bloquear/desbloquear (solo visible para admin que no sea el mismo usuario) -->
                         <button th:if="${usuario.admin and usuario.id != usuarioFila.id}"
                                 th:data-id="${usuarioFila.id}"
                                 th:data-enabled="${usuarioFila.enabled}"
                                 class="btn btn-sm ml-2"
                                 th:classappend="${usuarioFila.enabled} ? 'btn-danger' : 'btn-success'"
                                 th:text="${usuarioFila.enabled} ? 'Bloquear' : 'Desbloquear'"
-                                onclick="toggleUserStatus(this)">
-                        </button>
-
-                        <button th:if="${usuario.admin}"
-                                th:data-id="${usuario.id}"
-                                th:data-enabled="${usuario.enabled}"
-                                class="btn btn-sm ml-2"
-                                th:classappend="${usuario.enabled} ? 'btn-danger' : 'btn-success'"
-                                th:text="${usuario.enabled} ? 'Bloquear' : 'Desbloquear'"
                                 onclick="toggleUserStatus(this)">
                         </button>
                     </td>
@@ -59,7 +59,12 @@
         </div>
     </div>
 </div>
+<!-- Inserta los scripts comunes -->
+
 <div th:replace="~{fragments::javascript}"></div>
+
+<!-- Script JS para hacer la llamada al backend y actualizar el estado del botón dinámicamente -->
+
 <script>
     function toggleUserStatus(button) {
         const userId = button.getAttribute('data-id');
@@ -69,7 +74,6 @@
             method: 'PUT'
         }).then(response => {
             if (response.ok) {
-                // Actualizar estado visual del botón
                 const newState = !isEnabled;
                 button.setAttribute('data-enabled', newState);
                 button.textContent = newState ? 'Bloquear' : 'Desbloquear';

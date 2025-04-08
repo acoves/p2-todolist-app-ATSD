@@ -7,12 +7,19 @@ import todolist.model.Usuario;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitario para verificar el comportamiento del método findByEnabled()
+ * del repositorio UsuarioRepository.
+ */
 @DataJpaTest
 class UserBlockRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    /**
+     * Verifica que el método findByEnabled(true) solo devuelve usuarios activos.
+     */
     @Test
     void findByEnabled_shouldReturnOnlyActiveUsersWhenTrue() {
         // Given
@@ -32,6 +39,9 @@ class UserBlockRepositoryTest {
         assertEquals("active@test.com", result.get(0).getEmail());
     }
 
+    /**
+     * Verifica que el método findByEnabled(false) solo devuelve usuarios bloqueados.
+     */
     @Test
     void findByEnabled_shouldReturnOnlyBlockedUsersWhenFalse() {
         // Given

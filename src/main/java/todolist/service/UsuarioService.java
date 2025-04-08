@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import java.util.Optional;
 
 @Service
@@ -27,11 +26,13 @@ public class UsuarioService {
     @Autowired
     private ModelMapper modelMapper;
 
+    // Método nuevo para verificar existencia de administrador
     @Transactional(readOnly = true)
     public boolean existsByAdmin(boolean admin) {
         return usuarioRepository.existsByAdmin(admin);
     }
 
+    // Nuevo método para cambiar el estado enabled
     @Transactional
     public void toggleUserStatus(Long userId, boolean enabled) {
         Usuario usuario = usuarioRepository.findById(userId)
@@ -52,27 +53,27 @@ public class UsuarioService {
         }
     }
 
-    // Se añade un usuario en la aplicación.
-    // El email y password del usuario deben ser distinto de null
-    // El email no debe estar registrado en la base de datos
+    // Registro modificado para validar administrador único
     @Transactional
     public UsuarioData registrar(UsuarioData usuario) {
         Optional<Usuario> usuarioBD = usuarioRepository.findByEmail(usuario.getEmail());
-        if (usuarioBD.isPresent())
+        if (usuarioBD.isPresent()) {
             throw new UsuarioServiceException("El usuario " + usuario.getEmail() + " ya está registrado");
-        else if (usuario.getEmail() == null)
+        } else if (usuario.getEmail() == null) {
             throw new UsuarioServiceException("El usuario no tiene email");
-        else if (usuario.getPassword() == null)
+        } else if (usuario.getPassword() == null) {
             throw new UsuarioServiceException("El usuario no tiene password");
-        else {
+        } else {
+            // Validar si el nuevo usuario es admin y ya existe uno
             Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
             usuarioNuevo.setEnabled(true);
             if (usuarioNuevo.isAdmin() && usuarioRepository.existsByAdmin(true)) {
                 throw new UsuarioServiceException("Ya existe un administrador registrado");
             }
 
+            usuarioNuevo = usuarioRepository.save(usuarioNuevo);
+            return modelMapper.map(usuarioNuevo, UsuarioData.class);
         }
-        return usuario;
     }
 
     @Transactional(readOnly = true)
@@ -84,20 +85,15 @@ public class UsuarioService {
     @Transactional(readOnly = true)
     public UsuarioData findById(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado")); // Lanza excepción
+                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado"));
         return modelMapper.map(usuario, UsuarioData.class);
     }
 
-    // Método de solo lectura para obtener todos los usuarios registrados
     @Transactional(readOnly = true)
     public List<UsuarioData> findAllUsuarios() {
-        // Recupera todos los usuarios desde la base de datos usando CrudRepository
         Iterable<Usuario> usuarios = usuarioRepository.findAll();
-        // Convierte el Iterable en un Stream, transforma cada entidad Usuario a su DTO UsuarioData,
-        // y recopila los resultados en una lista
         return StreamSupport.stream(usuarios.spliterator(), false)
                 .map(usuario -> modelMapper.map(usuario, UsuarioData.class))
                 .collect(Collectors.toList());
     }
-
 }

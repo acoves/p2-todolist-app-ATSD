@@ -32,7 +32,6 @@
                             <input id="password" class="form-control" name="password" placeholder="Contraseña"
                                    type="password" th:field="*{password}" required/>
                         </div>
-
                         <div class="form-group">
                             <label for="fechaNacimiento">Fecha de nacimiento</label>
                             <input id="fechaNacimiento" class="form-control" name="fechaNacimiento"
@@ -55,6 +54,7 @@
             </form>
         </div>
     </div>
+
     <div class="row mt-3 justify-content-center">
         <div class="col-9">
             <div th:object="${registroData}">
@@ -70,6 +70,5 @@
 </div>
 
 <div th:replace="fragments::javascript"/>
-
 </body>
 </html>

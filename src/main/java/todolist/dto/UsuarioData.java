@@ -12,7 +12,7 @@ public class UsuarioData {
     private String password;
     private Date fechaNacimiento;
     private boolean admin;
-    private boolean enabled;
+    private boolean enabled; // Nuevo campo añadido
 
     // Getters y setters
 
@@ -55,10 +55,12 @@ public class UsuarioData {
     public boolean isAdmin() { return admin; }
     public void setAdmin(boolean admin) { this.admin = admin; }
 
-    // Sobreescribimos equals y hashCode para que dos usuarios sean iguales
-    // si tienen el mismo ID (ignoramos el resto de atributos)
+    // Nuevos getter y setter para enabled
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+    // Sobreescribimos equals y hashCode para que dos usuarios sean iguales
+    // si tienen el mismo ID (ignoramos el resto de atributos)
 
     @Override
     public boolean equals(Object o) {

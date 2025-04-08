@@ -44,6 +44,7 @@ public class LoginController {
         if (loginStatus == UsuarioService.LoginStatus.LOGIN_OK) {
             UsuarioData usuario = usuarioService.findByEmail(loginData.geteMail());
 
+            // Nueva verificación de usuario bloqueado
             if (!usuario.isEnabled()) {
                 model.addAttribute("error", "Usuario bloqueado");
                 return "formLogin";
@@ -51,10 +52,11 @@ public class LoginController {
 
             managerUserSession.logearUsuario(usuario.getId());
 
+            // Redirigir al admin a la lista de usuarios
             if (usuario.isAdmin()) {
-                return "redirect:/registered";
+                return "redirect:/registered"; // Ruta para listar usuarios
             } else {
-                return "redirect:/usuarios/" + usuario.getId() + "/tareas";
+                return "redirect:/usuarios/" + usuario.getId() + "/tareas"; // Ruta normal de tareas
             }
 
         } else if (loginStatus == UsuarioService.LoginStatus.USER_NOT_FOUND) {
@@ -69,6 +71,7 @@ public class LoginController {
 
     @GetMapping("/registro")
     public String registroForm(Model model) {
+        // Verificar si ya existe un administrador
         boolean adminExists = usuarioService.existsByAdmin(true);
         model.addAttribute("adminExists", adminExists);
         model.addAttribute("registroData", new RegistroData());
@@ -89,6 +92,7 @@ public class LoginController {
             usuario.setFechaNacimiento(registroData.getFechaNacimiento());
             usuario.setAdmin(registroData.isAdmin());
 
+            // Establecer enabled = true
             usuario.setEnabled(true);
 
             usuarioService.registrar(usuario);

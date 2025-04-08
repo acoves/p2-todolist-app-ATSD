@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: todolist.controller.UserListWebTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.527 s <<< FAILURE! - in todolist.controller.UserListWebTest
-testUserListShowsDataWhenAuthenticated  Time elapsed: 0.07 s  <<< ERROR!
-org.xml.sax.SAXParseException: The element type "link" must be terminated by the matching end-tag "</link>".
-	at todolist.controller.UserListWebTest.testUserListShowsDataWhenAuthenticated(UserListWebTest.java:68)
-
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.583 s - in todolist.controller.UserListWebTest

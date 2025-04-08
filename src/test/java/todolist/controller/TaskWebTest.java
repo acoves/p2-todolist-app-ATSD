@@ -21,6 +21,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+/**
+ * Test de integración de la funcionalidad de tareas desde el punto de vista de la interfaz web.
+ * Se prueban operaciones completas: listar, crear, editar y eliminar tareas.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/clean-db.sql")
@@ -29,32 +34,30 @@ public class TaskWebTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // Declaramos los servicios como Autowired
+
     @Autowired
     private TareaService tareaService;
 
     @Autowired
     private UsuarioService usuarioService;
 
-    // Moqueamos el managerUserSession para poder moquear el usuario logeado
+
     @MockBean
     private ManagerUserSession managerUserSession;
 
-    // Método para inicializar los datos de prueba en la BD
-    // Devuelve un mapa con los identificadores del usuario y de la primera tarea añadida
+
 
     Map<String, Long> addUsuarioTareasBD() {
-        // Añadimos un usuario a la base de datos
+
         UsuarioData usuario = new UsuarioData();
         usuario.setEmail("richard@umh.es");
         usuario.setPassword("1234");
         usuario = usuarioService.registrar(usuario);
 
-        // Y añadimos dos tareas asociadas a ese usuario
+
         TareaData tarea1 = tareaService.nuevaTareaUsuario(usuario.getId(), "Buy milk");
         tareaService.nuevaTareaUsuario(usuario.getId(), "Book a flight");
 
-        // Devolvemos los ids del usuario y de la primera tarea añadida
         Map<String, Long> ids = new HashMap<>();
         ids.put("usuarioId", usuario.getId());
         ids.put("tareaId", tarea1.getId());
@@ -62,21 +65,19 @@ public class TaskWebTest {
 
     }
 
+    /**
+     * Test que verifica que la página de listado de tareas
+     * muestra correctamente las tareas asociadas a un usuario autenticado.
+     */
     @Test
     public void listaTareas() throws Exception {
-        // GIVEN
-        // Un usuario con dos tareas en la BD
+
         Long usuarioId = addUsuarioTareasBD().get("usuarioId");
 
-        // Moqueamos el método usuarioLogeado para que devuelva el usuario 1L,
-        // el mismo que se está usando en la petición. De esta forma evitamos
-        // que salte la excepción de que el usuario que está haciendo la
-        // petición no está logeado.
+
         when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
 
-        // WHEN, THEN
-        // se realiza la petición GET al listado de tareas del usuario,
-        // el HTML devuelto contiene las descripciones de sus tareas.
+
 
         String url = "/usuarios/" + usuarioId.toString() + "/tareas";
 
@@ -87,19 +88,19 @@ public class TaskWebTest {
                 ))));
     }
 
+    /**
+     * Test que comprueba que al acceder a la ruta de crear nueva tarea,
+     * se devuelve correctamente el formulario HTML con los datos esperados.
+     */
     @Test
     public void getNuevaTareaDevuelveForm() throws Exception {
-        // GIVEN
-        // Un usuario con dos tareas en la BD
+
         Long usuarioId = addUsuarioTareasBD().get("usuarioId");
 
-        // Ver el comentario en el primer test
+
         when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
 
-        // WHEN, THEN
-        // si ejecutamos una petición GET para crear una nueva tarea de un usuario,
-        // el HTML resultante contiene un formulario y la ruta con
-        // la acción para crear la nueva tarea.
+
 
         String urlPeticion = "/usuarios/" + usuarioId.toString() + "/tareas/nueva";
         String urlAction = "action=\"/usuarios/" + usuarioId.toString() + "/tareas/nueva\"";
@@ -111,19 +112,18 @@ public class TaskWebTest {
                 ))));
     }
 
+    /**
+     * Test que simula la creación de una nueva tarea vía POST,
+     * espera una redirección y luego comprueba que la tarea aparece listada.
+     */
     @Test
     public void postNuevaTareaDevuelveRedirectYAñadeTarea() throws Exception {
-        // GIVEN
-        // Un usuario con dos tareas en la BD
+
         Long usuarioId = addUsuarioTareasBD().get("usuarioId");
 
-        // Ver el comentario en el primer test
         when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
 
-        // WHEN, THEN
-        // realizamos la petición POST para añadir una nueva tarea,
-        // el estado HTTP que se devuelve es un REDIRECT al listado
-        // de tareas.
+
 
         String urlPost = "/usuarios/" + usuarioId.toString() + "/tareas/nueva";
         String urlRedirect = "/usuarios/" + usuarioId.toString() + "/tareas";
@@ -133,34 +133,33 @@ public class TaskWebTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(urlRedirect));
 
-        // y si después consultamos el listado de tareas con una petición
-        // GET el HTML contiene la tarea añadida.
+
 
         this.mockMvc.perform(get(urlRedirect))
                 .andExpect((content().string(containsString("Study"))));
     }
 
+    /**
+     * Test que simula la creación de una nueva tarea vía POST,
+     * espera una redirección y luego comprueba que la tarea aparece listada.
+     */
     @Test
     public void deleteTareaDevuelveOKyBorraTarea() throws Exception {
-        // GIVEN
-        // Un usuario con dos tareas en la BD
+
         Map<String, Long> ids = addUsuarioTareasBD();
         Long usuarioId = ids.get("usuarioId");
         Long tareaLavarCocheId = ids.get("tareaId");
 
-        // Ver el comentario en el primer test
+
         when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
 
-        // WHEN, THEN
-        // realizamos la petición DELETE para borrar una tarea,
-        // se devuelve el estado HTTP que se devuelve es OK,
+
 
         String urlDelete = "/tareas/" + tareaLavarCocheId.toString();
 
         this.mockMvc.perform(delete(urlDelete))
                 .andExpect(status().isOk());
 
-        // y cuando se pide un listado de tareas del usuario, la tarea borrada ya no aparece.
 
         String urlListado = "/usuarios/" + usuarioId + "/tareas";
 
@@ -170,19 +169,19 @@ public class TaskWebTest {
                                 containsString("Book a flight"))));
     }
 
+    /**
+     * Test que simula la edición de una tarea existente,
+     * espera una redirección y luego comprueba que la tarea aparece listada.
+     */
     @Test
     public void editarTareaActualizaLaTarea() throws Exception {
-        // GIVEN
-        // Un usuario con dos tareas en la BD
+
         Map<String, Long> ids = addUsuarioTareasBD();
         Long usuarioId = ids.get("usuarioId");
         Long tareaLavarCocheId = ids.get("tareaId");
 
-        // Ver el comentario en el primer test
         when(managerUserSession.usuarioLogeado()).thenReturn(usuarioId);
 
-        // WHEN, THEN
-        // realizamos una petición POST al endpoint para editar una tarea
 
         String urlEditar = "/tareas/" + tareaLavarCocheId + "/editar";
         String urlRedirect = "/usuarios/" + usuarioId + "/tareas";
@@ -192,8 +191,7 @@ public class TaskWebTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(urlRedirect));
 
-        // Y si realizamos un listado de las tareas del usuario
-        // ha cambiado el título de la tarea modificada
+
 
         String urlListado = "/usuarios/" + usuarioId + "/tareas";
 
