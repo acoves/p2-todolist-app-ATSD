@@ -42,6 +42,8 @@ public class UserWebTest {
         UsuarioData anaGarcia = new UsuarioData();
         anaGarcia.setNombre("Ana García");
         anaGarcia.setId(1L);
+        anaGarcia.setEnabled(true);
+        anaGarcia.setAdmin(false);
 
         when(usuarioService.login("ana.garcia@gmail.com", "12345678"))
                 .thenReturn(UsuarioService.LoginStatus.LOGIN_OK);
