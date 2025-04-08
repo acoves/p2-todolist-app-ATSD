@@ -28,6 +28,11 @@ public class UsuarioService {
     private ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
+    public boolean existsByAdmin(boolean admin) {
+        return usuarioRepository.existsByAdmin(admin);
+    }
+
+    @Transactional(readOnly = true)
     public LoginStatus login(String eMail, String password) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(eMail);
         if (!usuario.isPresent()) {
@@ -53,24 +58,24 @@ public class UsuarioService {
             throw new UsuarioServiceException("El usuario no tiene password");
         else {
             Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
-            usuarioNuevo = usuarioRepository.save(usuarioNuevo);
-            return modelMapper.map(usuarioNuevo, UsuarioData.class);
+            if (usuarioNuevo.isAdmin() && usuarioRepository.existsByAdmin(true)) {
+                throw new UsuarioServiceException("Ya existe un administrador registrado");
+            }
+
         }
+        return usuario;
     }
 
     @Transactional(readOnly = true)
     public UsuarioData findByEmail(String email) {
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
-        if (usuario == null) return null;
-        else {
-            return modelMapper.map(usuario, UsuarioData.class);
-        }
+        return (usuario != null) ? modelMapper.map(usuario, UsuarioData.class) : null;
     }
 
     @Transactional(readOnly = true)
     public UsuarioData findById(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado")); // Lanza excepción
+                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado")); // Lanza excepción
         return modelMapper.map(usuario, UsuarioData.class);
     }
 

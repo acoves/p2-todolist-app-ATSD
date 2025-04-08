@@ -60,32 +60,35 @@ public class LoginController {
 
     @GetMapping("/registro")
     public String registroForm(Model model) {
+        boolean adminExists = usuarioService.existsByAdmin(true);
+        model.addAttribute("adminExists", adminExists);
         model.addAttribute("registroData", new RegistroData());
         return "formRegistro";
     }
 
-   @PostMapping("/registro")
-   public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model) {
+    @PostMapping("/registro")
+    public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             return "formRegistro";
         }
 
-        if (usuarioService.findByEmail(registroData.getEmail()) != null) {
-            model.addAttribute("registroData", registroData);
-            model.addAttribute("error", "El usuario " + registroData.getEmail() + " ya existe");
+        try {
+            UsuarioData usuario = new UsuarioData();
+            usuario.setEmail(registroData.getEmail());
+            usuario.setPassword(registroData.getPassword());
+            usuario.setNombre(registroData.getNombre());
+            usuario.setFechaNacimiento(registroData.getFechaNacimiento());
+            usuario.setEsAdmin(registroData.isAdmin());
+
+            usuarioService.registrar(usuario);
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
             return "formRegistro";
         }
-
-        UsuarioData usuario = new UsuarioData();
-        usuario.setEmail(registroData.getEmail());
-        usuario.setPassword(registroData.getPassword());
-        usuario.setFechaNacimiento(registroData.getFechaNacimiento());
-        usuario.setNombre(registroData.getNombre());
-
-        usuarioService.registrar(usuario);
-        return "redirect:/login";
-   }
+    }
 
    @GetMapping("/logout")
    public String logout(HttpSession session) {
