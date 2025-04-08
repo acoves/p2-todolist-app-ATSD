@@ -37,11 +37,11 @@ public class UserDescriptionWebTest {
     }
 
     // Método helper
-    private UsuarioData crearUsuarioDePrueba(String email, boolean esAdmin) {
+    private UsuarioData crearUsuarioDePrueba(String email, boolean admin) {
         UsuarioData usuario = new UsuarioData();
         usuario.setEmail(email);
         usuario.setPassword("1234");
-        usuario.setEsAdmin(esAdmin);
+        usuario.setAdmin(admin);
         return usuarioService.registrar(usuario);
     }
 }
