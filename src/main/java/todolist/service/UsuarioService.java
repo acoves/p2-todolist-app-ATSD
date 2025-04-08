@@ -66,6 +66,7 @@ public class UsuarioService {
             throw new UsuarioServiceException("El usuario no tiene password");
         else {
             Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
+            usuarioNuevo.setEnabled(true);
             if (usuarioNuevo.isAdmin() && usuarioRepository.existsByAdmin(true)) {
                 throw new UsuarioServiceException("Ya existe un administrador registrado");
             }

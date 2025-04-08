@@ -7,13 +7,18 @@
 <body>
 <div class="container-fluid">
     <div th:replace="~{fragments :: navbar(
-         ${loggedIn},
-            ${usuario.nombre}
-     )}"></div>
+        ${loggedIn},
+        ${usuario.nombre}
+    )}"></div>
 
     <div class="row mt-3">
         <div class="col">
             <h2>Usuarios Registrados</h2>
+
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <span th:text="${error}"></span>
+            </div>
+
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -26,19 +31,20 @@
                 <tr th:if="${#lists.isEmpty(usuarios)}">
                     <td colspan="3" class="text-center">No hay usuarios registrados</td>
                 </tr>
-                <tr th:each="usuario : ${usuarios}">
-                    <td th:text="${usuario.id}">-1</td>
-                    <td th:text="${usuario.email}">email@placeholder</td>
+                <tr th:each="usuarioFila : ${usuarios}">
+                    <td th:text="${usuarioFila.id}">-1</td>
+                    <td th:text="${usuarioFila.email}">email@placeholder</td>
                     <td>
-                        <a th:href="@{/registered/{id}(id=${usuario.id})}"
+                        <a th:href="@{/registered/{id}(id=${usuarioFila.id})}"
                            class="btn btn-info btn-sm">Ver detalles</a>
 
-                        <button th:if="${usuario.admin}"
-                                th:data-id="${usuario.id}"
-                                th:data-enabled="${usuario.enabled}"
+                        <!-- Botón de bloqueo/desbloqueo (usar usuarioLogeado) -->
+                        <button th:if="${usuario.admin and usuario.id != usuarioFila.id}"
+                                th:data-id="${usuarioFila.id}"
+                                th:data-enabled="${usuarioFila.enabled}"
                                 class="btn btn-sm ml-2"
-                                th:classappend="${usuario.enabled} ? 'btn-danger' : 'btn-success'"
-                                th:text="${usuario.enabled} ? 'Bloquear' : 'Desbloquear'"
+                                th:classappend="${usuarioFila.enabled} ? 'btn-danger' : 'btn-success'"
+                                th:text="${usuarioFila.enabled} ? 'Bloquear' : 'Desbloquear'"
                                 onclick="toggleUserStatus(this)">
                         </button>
                     </td>
@@ -49,6 +55,7 @@
     </div>
 </div>
 <div th:replace="~{fragments::javascript}"></div>
+
 <script>
     function toggleUserStatus(button) {
         const userId = button.getAttribute('data-id');

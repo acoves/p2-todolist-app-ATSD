@@ -87,7 +87,9 @@ public class LoginController {
             usuario.setPassword(registroData.getPassword());
             usuario.setNombre(registroData.getNombre());
             usuario.setFechaNacimiento(registroData.getFechaNacimiento());
-            usuario.setAdmin(registroData.isAdmin()); // Capturar el valor del checkbox
+            usuario.setAdmin(registroData.isAdmin());
+
+            usuario.setEnabled(true);
 
             usuarioService.registrar(usuario);
             return "redirect:/login";

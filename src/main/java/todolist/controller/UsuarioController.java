@@ -4,25 +4,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import todolist.dto.UsuarioData;
 import org.springframework.web.bind.annotation.*;
+import todolist.dto.UsuarioData;
 import todolist.service.UsuarioService;
 import todolist.authentication.ManagerUserSession;
 import todolist.service.UsuarioServiceException;
+import java.util.List;
 
 @Controller
 public class UsuarioController {
-    // Servicio para acceder a los datos de usuarios
+
     private final UsuarioService usuarioService;
-    // Componente para gestionar la sesión del usuario logeado
     private final ManagerUserSession managerUserSession;
 
-    // Constructor con inyección de dependencias
     public UsuarioController(UsuarioService usuarioService, ManagerUserSession managerUserSession) {
         this.usuarioService = usuarioService;
         this.managerUserSession = managerUserSession;
     }
 
+    // Nuevo endpoint para actualizar estado de usuario
     @PutMapping("/registered/{id}/status")
     @ResponseBody
     public ResponseEntity<?> updateUserStatus(
@@ -31,9 +31,12 @@ public class UsuarioController {
     ) {
         Long loggedUserId = managerUserSession.usuarioLogeado();
 
-        // Verificar autenticación
+        // Verificar autenticación y auto-bloqueo
         if (loggedUserId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (id.equals(loggedUserId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         try {
@@ -43,27 +46,35 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    // Mapea las peticiones GET a la URL "/registered"
+
     @GetMapping("/registered")
     public String listUsuarios(Model model) {
-        // Comprueba si hay un usuario logeado en la sesión
         Long usuarioId = managerUserSession.usuarioLogeado();
-        // Verificar autenticación
-        boolean loggedIn = (usuarioId != null);
-        model.addAttribute("loggedIn", loggedIn);
 
-        if (!loggedIn) {
+        // Verificar autenticación
+        if (usuarioId == null) {
             return "redirect:/login";
         }
 
-        UsuarioData usuario = usuarioService.findById(usuarioId);
-        model.addAttribute("usuario", usuario);
+        try {
+            // Obtener usuario logeado y lista de usuarios
+            UsuarioData usuario = usuarioService.findById(usuarioId);
+            List<UsuarioData> usuarios = usuarioService.findAllUsuarios();
 
-        model.addAttribute("usuarios", usuarioService.findAllUsuarios());
+            // Añadir atributos al modelo
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("usuarios", usuarios);
+            model.addAttribute("loggedIn", true);
 
-        return "usersList";
+            return "usersList";
+
+        } catch (Exception e) {
+            // Manejar errores mostrando un mensaje en la misma vista
+            model.addAttribute("error", "Error al cargar los usuarios: " + e.getMessage());
+            return "usersList"; // Mantenerse en la misma página
+        }
     }
-    // Mapea las peticiones GET a la URL "/registered/{id}"
+
     @GetMapping("/registered/{id}")
     public String verUsuario(@PathVariable Long id, Model model) {
         Long usuarioLogeadoId = managerUserSession.usuarioLogeado();
