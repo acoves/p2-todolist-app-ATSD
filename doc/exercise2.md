@@ -128,35 +128,54 @@ This documentation outlines the technical progress of the ToDo List web applicat
 ## 📌 Highlighted Code Example
 
 ```java
-@Transactional
+// Modified registration to validate single administrator
+@Transactional // Indicates that this method runs within a database transaction
 public UsuarioData registrar(UsuarioData usuario) {
+    // Searches the database for a user with the same email
     Optional<Usuario> usuarioBD = usuarioRepository.findByEmail(usuario.getEmail());
 
+    // If the user already exists, throws an exception indicating the email is already registered
     if (usuarioBD.isPresent()) {
         throw new UsuarioServiceException("El usuario " + usuario.getEmail() + " ya está registrado");
-    } else if (usuario.getEmail() == null) {
+    }
+    // If the user's email is null, throws an exception indicating the email is required
+    else if (usuario.getEmail() == null) {
         throw new UsuarioServiceException("El usuario no tiene email");
-    } else if (usuario.getPassword() == null) {
+    }
+    // If the user's password is null, throws an exception indicating the password is required
+    else if (usuario.getPassword() == null) {
         throw new UsuarioServiceException("El usuario no tiene password");
-    } else {
+    }
+    else {
+        // Converts the UsuarioData object to a Usuario entity using ModelMapper
         Usuario usuarioNuevo = modelMapper.map(usuario, Usuario.class);
+
+        // Sets the "enabled" status of the user to true (active)
         usuarioNuevo.setEnabled(true);
 
+        // 💡 Highlight: this block prevents registering more than one admin
+        // Checks if the new user is an admin and if an admin already exists in the database
         if (usuarioNuevo.isAdmin() && usuarioRepository.existsByAdmin(true)) {
+            // If an admin already exists, throws an exception indicating another cannot be registered
             throw new UsuarioServiceException("Ya existe un administrador registrado");
         }
 
+        // Saves the new user in the database
         usuarioNuevo = usuarioRepository.save(usuarioNuevo);
+
+        // Converts the saved Usuario entity back to UsuarioData and returns it
         return modelMapper.map(usuarioNuevo, UsuarioData.class);
     }
 }
 ```
+> 🔎 **Note**: This code is located in the file `UsuarioService.java`.
 
 ### 🔍 Explanation
 - Ensures **email uniqueness**, **non-null password**, and **prevents multiple admin accounts**.
 - If conditions are met, the user is saved and returned.
 - Encapsulated in a `@Transactional` context to ensure DB integrity.
-
+  
+> The highlighted block ensures that **only one administrator** can exist in the system, avoiding duplicate admin registrations.
 ---
 
 ## 🔗 External Resources
