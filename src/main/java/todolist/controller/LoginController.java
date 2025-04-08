@@ -39,19 +39,24 @@ public class LoginController {
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute LoginData loginData, Model model, HttpSession session) {
 
-        // Llamada al servicio para comprobar si el login es correcto
         UsuarioService.LoginStatus loginStatus = usuarioService.login(loginData.geteMail(), loginData.getPassword());
 
         if (loginStatus == UsuarioService.LoginStatus.LOGIN_OK) {
             UsuarioData usuario = usuarioService.findByEmail(loginData.geteMail());
 
+            if (!usuario.isEnabled()) {
+                model.addAttribute("error", "Usuario bloqueado");
+                return "formLogin";
+            }
+
             managerUserSession.logearUsuario(usuario.getId());
 
             if (usuario.isAdmin()) {
-                return "redirect:/registered"; // Ruta para listar usuarios
+                return "redirect:/registered";
             } else {
-                return "redirect:/usuarios/" + usuario.getId() + "/tareas"; // Ruta normal de tareas
+                return "redirect:/usuarios/" + usuario.getId() + "/tareas";
             }
+
         } else if (loginStatus == UsuarioService.LoginStatus.USER_NOT_FOUND) {
             model.addAttribute("error", "No existe usuario");
             return "formLogin";
@@ -72,7 +77,6 @@ public class LoginController {
 
     @PostMapping("/registro")
     public String registroSubmit(@Valid RegistroData registroData, BindingResult result, Model model) {
-
         if (result.hasErrors()) {
             return "formRegistro";
         }
@@ -83,7 +87,7 @@ public class LoginController {
             usuario.setPassword(registroData.getPassword());
             usuario.setNombre(registroData.getNombre());
             usuario.setFechaNacimiento(registroData.getFechaNacimiento());
-            usuario.setAdmin(registroData.isAdmin());
+            usuario.setAdmin(registroData.isAdmin()); // Capturar el valor del checkbox
 
             usuarioService.registrar(usuario);
             return "redirect:/login";
@@ -94,9 +98,9 @@ public class LoginController {
         }
     }
 
-   @GetMapping("/logout")
-   public String logout(HttpSession session) {
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
         managerUserSession.logout();
         return "redirect:/login";
-   }
+    }
 }

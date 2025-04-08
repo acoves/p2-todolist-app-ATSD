@@ -32,6 +32,14 @@ public class UsuarioService {
         return usuarioRepository.existsByAdmin(admin);
     }
 
+    @Transactional
+    public void toggleUserStatus(Long userId, boolean enabled) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new UsuarioServiceException("Usuario no encontrado"));
+        usuario.setEnabled(enabled);
+        usuarioRepository.save(usuario);
+    }
+
     @Transactional(readOnly = true)
     public LoginStatus login(String eMail, String password) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(eMail);

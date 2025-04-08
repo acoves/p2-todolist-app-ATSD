@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div th:replace="~{fragments :: navbar(
          ${loggedIn},
-                 ${usuario.nombre}
+            ${usuario.nombre}
      )}"></div>
 
     <div class="row mt-3">
@@ -32,6 +32,15 @@
                     <td>
                         <a th:href="@{/registered/{id}(id=${usuario.id})}"
                            class="btn btn-info btn-sm">Ver detalles</a>
+
+                        <button th:if="${usuario.admin}"
+                                th:data-id="${usuario.id}"
+                                th:data-enabled="${usuario.enabled}"
+                                class="btn btn-sm ml-2"
+                                th:classappend="${usuario.enabled} ? 'btn-danger' : 'btn-success'"
+                                th:text="${usuario.enabled} ? 'Bloquear' : 'Desbloquear'"
+                                onclick="toggleUserStatus(this)">
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -40,5 +49,24 @@
     </div>
 </div>
 <div th:replace="~{fragments::javascript}"></div>
+<script>
+    function toggleUserStatus(button) {
+        const userId = button.getAttribute('data-id');
+        const isEnabled = button.getAttribute('data-enabled') === 'true';
+
+        fetch(`/registered/${userId}/status?enabled=${!isEnabled}`, {
+            method: 'PUT'
+        }).then(response => {
+            if (response.ok) {
+                // Actualizar estado visual del botón
+                const newState = !isEnabled;
+                button.setAttribute('data-enabled', newState);
+                button.textContent = newState ? 'Bloquear' : 'Desbloquear';
+                button.classList.remove(newState ? 'btn-success' : 'btn-danger');
+                button.classList.add(newState ? 'btn-danger' : 'btn-success');
+            }
+        });
+    }
+</script>
 </body>
 </html>
